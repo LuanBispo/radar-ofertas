@@ -79,7 +79,7 @@ filtros:
   preco_min_brl: 5            # evita "R$ 0,99" de peças avulsas/iscas
   preco_max_brl: 2000
   vendas_minimas: 5           # quando a plataforma informa vendas
-  avaliacao_minima: 4.3       # quando a plataforma informa nota (0-5)
+  avaliacao_minima: 4.0       # nota mínima (0-5). Produto sem nenhuma avaliação também é descartado
   # O título precisa conter pelo menos 1 destes termos (garante que é tecnologia)
   exigir_termos: [esp32, esp8266, arduino, raspberry, sensor, modulo, módulo, placa, kit, robo, robô,
                   wifi, wi-fi, zigbee, bluetooth, inteligente, smart, tuya, sonoff, alexa, rele, relé,
