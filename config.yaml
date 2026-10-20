@@ -1,0 +1,98 @@
+# ============================================================
+#  Radar de Ofertas Tech — configuração
+#  Edite à vontade: categorias, buscas, filtros e fontes.
+# ============================================================
+
+fontes:
+  shopee: true        # Shopee Affiliate Open API (retorna comissão real)
+  mercadolivre: true  # API pública do ML (comissão estimada pela tabela abaixo)
+  amazon: false       # Amazon PA-API (só libera após 3 vendas em 180 dias)
+  demo: false         # dados fictícios só para testar o fluxo
+
+# Comissão usada quando a plataforma NÃO informa a taxa por produto.
+# São estimativas — confira a tabela oficial do seu painel de afiliado e ajuste.
+comissao_estimada:
+  mercadolivre: 0.05
+  amazon: 0.04
+
+categorias:
+  microcontroladores:
+    nome: "🧠 Microcontroladores e placas"
+    buscas:
+      - esp32
+      - esp32-s3
+      - esp32-cam
+      - esp8266 nodemcu
+      - arduino uno
+      - arduino nano
+      - arduino mega
+      - raspberry pi pico
+      - raspberry pi 5
+  sensores:
+    nome: "📡 Sensores e módulos"
+    buscas:
+      - sensor dht22
+      - sensor ultrassonico hc-sr04
+      - sensor pir arduino
+      - sensor bme280
+      - sensor mpu6050
+      - modulo rele 5v
+      - modulo lora
+      - display oled 0.96
+      - sensor de gas mq
+      - leitor rfid rc522
+  kits:
+    nome: "🎓 Kits educacionais e robótica"
+    buscas:
+      - kit arduino iniciante
+      - kit esp32
+      - kit robotica educacional
+      - kit sensores arduino
+      - kit carrinho robo arduino
+      - kit maker
+  casa_inteligente:
+    nome: "🏠 Automação residencial"
+    buscas:
+      - tomada inteligente wifi
+      - interruptor inteligente wifi
+      - lampada inteligente wifi
+      - sensor porta zigbee
+      - hub zigbee
+      - controle universal infravermelho wifi
+      - fechadura digital inteligente
+      - camera wifi seguranca
+      - sonoff
+      - modulo tuya
+  ferramentas_componentes:
+    nome: "🔧 Componentes e bancada"
+    buscas:
+      - protoboard 830 pontos
+      - jumper macho femea
+      - servo motor sg90
+      - motor de passo nema 17
+      - fonte 12v chaveada
+      - ferro de solda estacao
+      - multimetro digital
+
+filtros:
+  comissao_minima: 0.04       # 4% — abaixo disso o produto é descartado
+  preco_min_brl: 5            # evita "R$ 0,99" de peças avulsas/iscas
+  preco_max_brl: 2000
+  vendas_minimas: 5           # quando a plataforma informa vendas
+  avaliacao_minima: 4.3       # quando a plataforma informa nota (0-5)
+  # O título precisa conter pelo menos 1 destes termos (garante que é tecnologia)
+  exigir_termos: [esp32, esp8266, arduino, raspberry, sensor, modulo, módulo, placa, kit, robo, robô,
+                  wifi, wi-fi, zigbee, bluetooth, inteligente, smart, tuya, sonoff, alexa, rele, relé,
+                  display, oled, lcd, lora, rfid, servo, motor, protoboard, jumper, fonte, solda,
+                  multimetro, multímetro, camera, câmera, fechadura, tomada, interruptor, lampada,
+                  lâmpada, hub, controle, nodemcu, microcontrolador, automação, automacao]
+  # Descarta títulos com estes termos (acessórios fora do nicho, golpes comuns)
+  excluir_termos: [capinha, capa para, pelicula, película, adesivo, camiseta, chaveiro, réplica,
+                   replica, usado, recondicionado, quebrado, defeito, "para retirada de peças",
+                   "envio internacional", "enviado do exterior", "taxa de importação", "taxa de importacao"]
+
+relatorio:
+  top_por_categoria: 10       # mais baratos por categoria no e-mail (a planilha anexa traz todos)
+  max_novidades: 15
+  queda_minima: 0.10          # avisa quedas de preço >= 10%
+  resultados_por_busca: 20
