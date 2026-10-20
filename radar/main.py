@@ -81,7 +81,8 @@ def main() -> None:
     per_source = collections.Counter(p.source for p in kept)
     stats = (f"{len(found)} resultados analisados, {len(kept)} aprovados "
              f"({', '.join(f'{report.SOURCE_LABEL[s]}: {n}' for s, n in per_source.items()) or 'nenhum'}). "
-             f"Novos: {sum(p.is_new for p in kept)}.")
+             f"Novos: {sum(p.is_new for p in kept)}. "
+             f"Só produtos com nota {str(float(cfg['filtros']['avaliacao_minima'])).replace('.', ',')} ou mais.")
     if errors:
         stats += f" Falhas de busca: {dict(errors)}."
     print(stats)
