@@ -40,14 +40,7 @@ def main() -> None:
             del active[name]
     if not active:
         print("Nenhuma loja com chave de API configurada ainda (ex.: Shopee). Nada a fazer hoje.")
-        index = Path("reports/index.html")
-        if not index.exists():
-            index.parent.mkdir(exist_ok=True)
-            index.write_text(
-                '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-                '<title>Radar Tech</title><body style="font-family:system-ui;max-width:640px;margin:40px auto;padding:0 16px">'
-                "<h1>📊 Radar de Ofertas Tech</h1><p>Aguardando a liberação da API da Shopee. "
-                "Assim que as chaves forem cadastradas, as ofertas aparecem aqui todo dia às 8h.</p>", encoding="utf-8")
+        report.save_site([], cfg, "Aguardando a liberação da API da Shopee.", status="aguardando")
         return
 
     limit = cfg["relatorio"]["resultados_por_busca"]
@@ -89,7 +82,7 @@ def main() -> None:
     print("Descartados:", dict(rejected))
 
     sections = report.build_sections(kept, cfg)
-    path, csv_path = report.save_files(kept, sections, stats)
+    path, csv_path = report.save_files(kept, sections, stats, cfg)
     print(f"Relatório salvo em {path}")
 
     if not args.no_send:
