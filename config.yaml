@@ -5,94 +5,202 @@
 
 fontes:
   shopee: true        # Shopee Affiliate Open API (retorna comissão real)
-  mercadolivre: true  # API pública do ML (comissão estimada pela tabela abaixo)
-  amazon: false       # Amazon PA-API (só libera após 3 vendas em 180 dias)
+  mercadolivre: true  # API do ML (comissão estimada pela tabela abaixo)
+  amazon: false       # Amazon (só libera após 3 vendas em 180 dias)
   demo: false         # dados fictícios só para testar o fluxo
 
+# Cada termo é pesquisado de vários jeitos para trazer o máximo de produtos.
+# Shopee: 4 = mais barato, 2 = mais vendido, 5 = maior comissão
+shopee_ordenacoes: [4, 2, 5]
+
 # Comissão usada quando a plataforma NÃO informa a taxa por produto.
-# São estimativas — confira a tabela oficial do seu painel de afiliado e ajuste.
+# São estimativas: confira a tabela oficial do seu painel de afiliado e ajuste.
 comissao_estimada:
   mercadolivre: 0.05
   amazon: 0.04
 
 categorias:
   microcontroladores:
-    nome: "🧠 Microcontroladores e placas"
+    nome: "🧠 Placas e microcontroladores"
     buscas:
       - esp32
       - esp32-s3
+      - esp32-c3
       - esp32-cam
       - esp8266 nodemcu
+      - wemos d1 mini
       - arduino uno
       - arduino nano
       - arduino mega
+      - arduino pro mini
       - raspberry pi pico
+      - raspberry pi 4
       - raspberry pi 5
+      - orange pi
+      - stm32 blue pill
+      - attiny85
   sensores:
-    nome: "📡 Sensores e módulos"
+    nome: "📡 Sensores"
     buscas:
       - sensor dht22
+      - sensor dht11
       - sensor ultrassonico hc-sr04
-      - sensor pir arduino
+      - sensor pir hc-sr501
+      - sensor de presença mmwave
       - sensor bme280
+      - sensor ds18b20
       - sensor mpu6050
+      - sensor de gas mq2
+      - sensor de umidade do solo
+      - sensor de corrente acs712
+      - sensor de chuva arduino
+      - sensor de luz ldr
+      - sensor infravermelho obstaculo
+      - sensor de fluxo de agua
+      - sensor de nivel de agua
+      - celula de carga hx711
+  modulos:
+    nome: "🔌 Módulos e comunicação"
+    buscas:
       - modulo rele 5v
+      - modulo rele 4 canais
       - modulo lora
-      - display oled 0.96
-      - sensor de gas mq
+      - modulo nrf24l01
+      - modulo bluetooth hc-05
+      - modulo gps neo-6m
+      - modulo gsm sim800l
       - leitor rfid rc522
+      - modulo rtc ds3231
+      - modulo cartao micro sd arduino
+      - modulo mp3 dfplayer
+      - modulo ponte h l298n
+      - driver motor a4988
+      - modulo ir receptor transmissor
+  displays:
+    nome: "🖥️ Displays e telas"
+    buscas:
+      - display oled 0.96
+      - display lcd 16x2 i2c
+      - display tft arduino
+      - display e-paper
+      - matriz de led max7219
+      - fita de led endereçavel ws2812b
+  energia:
+    nome: "🔋 Energia e alimentação"
+    buscas:
+      - modulo tp4056
+      - regulador step down lm2596
+      - conversor step up mt3608
+      - suporte bateria 18650
+      - fonte 5v 3a
+      - fonte 12v chaveada
+      - mini painel solar 5v
+      - fonte ajustavel bancada
+  motores:
+    nome: "⚙️ Motores e robótica"
+    buscas:
+      - servo motor sg90
+      - servo motor mg996r
+      - motor de passo nema 17
+      - motor de passo 28byj-48
+      - motor dc com caixa de redução
+      - chassi robo 2wd
+      - braço robotico arduino
+      - roda robo arduino
   kits:
-    nome: "🎓 Kits educacionais e robótica"
+    nome: "🎓 Kits educacionais"
     buscas:
       - kit arduino iniciante
+      - kit arduino completo
       - kit esp32
       - kit robotica educacional
       - kit sensores arduino
+      - kit 37 sensores
       - kit carrinho robo arduino
       - kit maker
+      - kit eletronica para iniciantes
+      - kit raspberry pi
+      - kit robotica infantil programavel
   casa_inteligente:
     nome: "🏠 Automação residencial"
     buscas:
       - tomada inteligente wifi
       - interruptor inteligente wifi
+      - interruptor inteligente zigbee
       - lampada inteligente wifi
-      - sensor porta zigbee
+      - fita led inteligente wifi
+      - sensor porta janela zigbee
+      - sensor de presença zigbee
+      - sensor de fumaça wifi
+      - sensor de vazamento de agua wifi
+      - sensor de temperatura wifi tuya
       - hub zigbee
       - controle universal infravermelho wifi
       - fechadura digital inteligente
       - camera wifi seguranca
+      - campainha inteligente wifi
+      - motor de cortina inteligente
+      - disjuntor inteligente wifi
       - sonoff
       - modulo tuya
-  ferramentas_componentes:
-    nome: "🔧 Componentes e bancada"
+      - modulo rele wifi tuya
+      - alexa echo dot
+  componentes:
+    nome: "🧩 Componentes eletrônicos"
     buscas:
+      - kit resistores
+      - kit capacitores eletroliticos
+      - kit transistores
+      - kit leds 5mm
+      - kit diodos
+      - push button arduino
+      - potenciometro arduino
+      - buzzer arduino
       - protoboard 830 pontos
       - jumper macho femea
-      - servo motor sg90
-      - motor de passo nema 17
-      - fonte 12v chaveada
-      - ferro de solda estacao
+      - placa de fenolite perfurada
+      - borne kre
+  ferramentas:
+    nome: "🔧 Ferramentas de bancada"
+    buscas:
+      - ferro de solda
+      - estacao de solda
+      - estacao de retrabalho
       - multimetro digital
+      - alicate amperimetro
+      - osciloscopio portatil
+      - sugador de solda
+      - estanho para solda
+      - lupa com garra bancada
+      - kit chaves de precisão eletronica
+      - programador usb ttl
+      - impressora 3d
+      - filamento pla
 
 filtros:
-  comissao_minima: 0.04       # 4% — abaixo disso o produto é descartado
+  comissao_minima: 0.05       # 5%: abaixo disso o produto é descartado
   preco_min_brl: 5            # evita "R$ 0,99" de peças avulsas/iscas
-  preco_max_brl: 2000
+  preco_max_brl: 3000
   vendas_minimas: 5           # quando a plataforma informa vendas
   avaliacao_minima: 4.0       # nota mínima (0-5). Produto sem nenhuma avaliação também é descartado
-  # O título precisa conter pelo menos 1 destes termos (garante que é tecnologia)
+  # O título precisa conter pelo menos 1 destes termos OU uma palavra da própria busca
+  # (garante que é tecnologia)
   exigir_termos: [esp32, esp8266, arduino, raspberry, sensor, modulo, módulo, placa, kit, robo, robô,
                   wifi, wi-fi, zigbee, bluetooth, inteligente, smart, tuya, sonoff, alexa, rele, relé,
                   display, oled, lcd, lora, rfid, servo, motor, protoboard, jumper, fonte, solda,
                   multimetro, multímetro, camera, câmera, fechadura, tomada, interruptor, lampada,
-                  lâmpada, hub, controle, nodemcu, microcontrolador, automação, automacao]
+                  lâmpada, hub, controle, nodemcu, microcontrolador, automação, automacao, eletronica,
+                  eletrônica, resistor, capacitor, transistor, led, regulador, conversor, driver,
+                  osciloscopio, osciloscópio, impressora 3d, filamento, stm32, attiny, wemos]
   # Descarta títulos com estes termos (acessórios fora do nicho, golpes comuns)
   excluir_termos: [capinha, capa para, pelicula, película, adesivo, camiseta, chaveiro, réplica,
                    replica, usado, recondicionado, quebrado, defeito, "para retirada de peças",
-                   "envio internacional", "enviado do exterior", "taxa de importação", "taxa de importacao"]
+                   "envio internacional", "enviado do exterior", "taxa de importação", "taxa de importacao",
+                   "para celular", iphone, "galaxy", "brinquedo de pelucia"]
 
 relatorio:
-  top_por_categoria: 10       # mais baratos por categoria no e-mail (a planilha anexa traz todos)
-  max_novidades: 15
+  top_por_categoria: 60       # quantos produtos mostrar por categoria na página
+  top_comissoes: 30           # seção "Maiores comissões"
+  max_novidades: 40
   queda_minima: 0.10          # avisa quedas de preço >= 10%
-  resultados_por_busca: 20
+  resultados_por_busca: 50
