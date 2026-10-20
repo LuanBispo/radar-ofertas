@@ -23,8 +23,10 @@ def reason_to_reject(p: Product, f: dict) -> str | None:
         return "preço fora da faixa"
     if p.sales is not None and p.sales < f["vendas_minimas"]:
         return "poucas vendas"
-    if p.rating and p.rating < f["avaliacao_minima"]:
-        return "avaliação baixa"
+    # Shopee devolve nota 0 quando o produto não tem avaliações: também é descartado.
+    # (A busca do Mercado Livre e da Amazon não informa nota; nesses casos o filtro não se aplica.)
+    if p.rating is not None and p.rating < f["avaliacao_minima"]:
+        return "avaliação baixa ou sem avaliações"
     return None
 
 
