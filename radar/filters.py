@@ -3,6 +3,8 @@ import unicodedata
 
 from .models import Product
 
+STOPWORDS = {"para", "com", "sem", "inteligente", "completo", "infantil", "portatil", "bancada"}
+
 
 def _norm(s: str) -> str:
     s = unicodedata.normalize("NFKD", s.lower())
@@ -13,7 +15,9 @@ def reason_to_reject(p: Product, f: dict) -> str | None:
     if not p.url:
         return "sem link"
     title = _norm(p.title)
-    if not any(_norm(t) in title for t in f["exigir_termos"]):
+    # tecnologia = contém um termo da lista OU uma palavra significativa da própria busca
+    query_words = [w for w in _norm(p.query).split() if len(w) >= 4 and w not in STOPWORDS]
+    if not any(_norm(t) in title for t in f["exigir_termos"]) and not any(w in title for w in query_words):
         return "fora do nicho"
     if any(_norm(t) in title for t in f["excluir_termos"]):
         return "termo excluído"
