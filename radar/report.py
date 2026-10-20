@@ -34,6 +34,10 @@ def build_sections(products: list[Product], cfg: dict) -> list[tuple[str, list[P
     if quedas:
         sections.append(("📉 Quedas de preço", quedas[: r["max_novidades"]]))
 
+    top = sorted(products, key=lambda p: -p.commission_value)[: r.get("top_comissoes", 30)]
+    if top:
+        sections.append(("💰 Maiores comissões (quanto você ganha por venda)", top))
+
     for cat_key, cat in cfg["categorias"].items():
         items = sorted((p for p in products if p.category == cat_key), key=lambda p: p.price)
         if items:
@@ -100,10 +104,16 @@ h2{{margin-top:32px;border-bottom:2px solid #eee;padding-bottom:4px}}
 .card img{{width:72px;height:72px;object-fit:contain;border-radius:6px;background:#fafafa}}
 .price{{font-weight:700;font-size:1.1em}} .muted{{color:#666;font-size:.9em}}
 .tag{{display:inline-block;background:#eef;padding:1px 6px;border-radius:4px;font-size:.8em;margin-right:4px}}
-a{{color:#0a58ca;text-decoration:none}}</style>
+a{{color:#0a58ca;text-decoration:none}}
+nav{{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}}
+nav a{{background:#f2f4f8;padding:5px 10px;border-radius:999px;font-size:.85em;color:#222}}</style>
 <h1>📊 Radar de Ofertas Tech — {today}</h1><p class="muted">{html.escape(stats)}</p>"""]
-    for title, items in sections:
-        parts.append(f"<h2>{html.escape(title)}</h2>")
+    # menu para pular direto para cada seção
+    parts.append("<nav>" + "".join(
+        f'<a href="#s{i}">{html.escape(title.split(" — ")[0].split(" (")[0])} ({len(items)})</a>'
+        for i, (title, items) in enumerate(sections)) + "</nav>")
+    for i, (title, items) in enumerate(sections):
+        parts.append(f'<h2 id="s{i}">{html.escape(title)}</h2>')
         for p in items:
             img = f'<img src="{html.escape(p.image)}" loading="lazy">' if p.image else '<img alt="">'
             comm = f"{p.commission_rate:.0%}" + (" (estimada)" if p.commission_is_estimate else "")
