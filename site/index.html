@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Radar de Ofertas · EngEasier</title>
+<meta name="description" content="Ofertas de tecnologia do dia, prontas para a equipe EngEasier indicar como afiliada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Identidade EngEasier: fundo oliva quase preto, texto creme, destaque verde-limão, rótulos em mono */
+:root{
+  --bg:#111410; --surface:#161C14; --surface-2:#1C2419; --line:#343B2F; --line-soft:#252D21;
+  --ink:#F4F4E9; --muted:#B2B7A9; --faint:#7E8775;
+  --lime:#C7F75A; --lime-ink:#18200D; --lime-soft:rgba(199,247,90,.10);
+  --hot:#FF8A5B;
+  --shopee:#FF7A50; --ml:#FFE24D; --amz:#FFB347;
+  --f-display:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--f-display);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
+
+/* faixa superior */
+.ribbon{background:var(--lime);color:var(--lime-ink);font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:10px 0;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.ribbon .wrap{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;text-align:center}
+
+/* cabeçalho */
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:24px;letter-spacing:-.02em;text-decoration:none}
+.brand svg{width:30px;height:30px;color:var(--lime)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}
+
+/* hero */
+.hero{padding-block:48px 28px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--lime);font:500 12px/1.4 var(--f-mono);letter-spacing:.16em;text-transform:uppercase}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--lime)}
+h1{font:800 clamp(44px,8vw,92px)/.92 var(--f-display);letter-spacing:-.035em;margin:18px 0 0;text-transform:uppercase;text-wrap:balance}
+h1 em{font-style:normal;color:var(--lime);display:block}
+.hero p{color:var(--muted);font-size:18px;max-width:46ch;margin:0}
+.hero p b{color:var(--ink)}
+
+/* passo a passo */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:28px}
+.steps div{padding:18px 20px;display:flex;gap:14px;align-items:flex-start;border-right:1px solid var(--line)}
+.steps div:last-child{border-right:0}
+.steps b{font:700 13px var(--f-mono);color:var(--lime-ink);background:var(--lime);border-radius:6px;padding:4px 7px;flex:none}
+.steps strong{display:block;font-size:16px}
+.steps span{color:var(--muted);font-size:14px}
+
+/* números */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r);padding:16px 18px}
+.stat .n{font:700 30px/1 var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .n.lime{color:var(--lime)}
+.stat .l{margin-top:8px;color:var(--faint);font:500 11px/1.3 var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
+
+/* botões de categoria (fixos no topo ao rolar) */
+.catbar{position:sticky;top:0;z-index:20;background:rgba(17,20,16,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-block:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.catbar .label{padding-top:12px;color:var(--faint);font:500 10.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
+.cats{display:flex;gap:8px;overflow-x:auto;padding-block:10px 14px;scrollbar-width:thin}
+.cat{flex:none;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14.5px;font-weight:600;white-space:nowrap;transition:border-color .15s,background .15s}
+.cat:hover{border-color:var(--lime)}
+.cat small{font:500 11px var(--f-mono);color:var(--faint);background:var(--bg);border-radius:4px;padding:2px 6px}
+.cat[aria-pressed="true"]{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.cat[aria-pressed="true"] small{background:rgba(24,32,13,.15);color:var(--lime-ink)}
+.cat.special{border-style:dashed}
+
+/* barra de ferramentas */
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-block:22px 6px}
+.search{flex:1 1 260px;position:relative}
+.search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px 12px 40px}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--faint)}
+select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.stores{display:flex;gap:6px;flex-wrap:wrap}
+.store-btn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}
+.store-btn[aria-pressed="true"]{border-color:var(--ink);background:var(--surface-2)}
+.count{color:var(--muted);font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding-block:10px 16px}
+.count b{color:var(--lime)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;padding-bottom:40px}
+.card{background:var(--surface);border:1px solid var(--line-soft);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--line)}
+.thumb{position:relative;aspect-ratio:4/3;background:#F4F4E9;display:grid;place-items:center}
+.thumb img{width:100%;height:100%;object-fit:contain;padding:10px}
+.thumb .ph{color:#9AA38E;width:44px;height:44px}
+.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+.badge{font:700 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;border-radius:5px}
+.b-new{background:var(--lime);color:var(--lime-ink)}
+.b-drop{background:var(--hot);color:#1F0E05}
+.b-store{position:absolute;top:10px;right:10px;background:rgba(17,20,16,.85);color:var(--ink)}
+.b-store.shopee{color:var(--shopee)} .b-store.mercadolivre{color:var(--ml)} .b-store.amazon{color:var(--amz)}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.title{font-size:15px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+.priceline{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.price{font:800 24px/1 var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.old{color:var(--faint);text-decoration:line-through;font-size:13px}
+.off{color:var(--lime);font:700 12px var(--f-mono)}
+.meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.gain{display:flex;justify-content:space-between;align-items:center;background:var(--lime-soft);border:1px solid rgba(199,247,90,.25);border-radius:8px;padding:9px 11px}
+.gain span{color:var(--muted);font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+.gain b{color:var(--lime);font:700 16px var(--f-mono);font-variant-numeric:tabular-nums}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:6px;border-radius:8px;padding:11px 10px;font-weight:700;font-size:13.5px;cursor:pointer;text-decoration:none;border:1px solid var(--line);background:transparent}
+.btn.primary{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.btn.primary:hover{background:#D6FF7A}
+.btn:hover{border-color:var(--ink)}
+.btn.wide{grid-column:1/-1}
+
+.notice{border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted);margin-bottom:40px}
+.notice strong{display:block;color:var(--ink);font-size:20px;margin-bottom:6px}
+.demo-flag{background:var(--hot);color:#1F0E05;font:700 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border-radius:8px;margin-top:18px;display:inline-block}
+
+footer{border-top:1px solid var(--line);color:var(--faint);font-size:13.5px;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;gap:16px 32px;flex-wrap:wrap;justify-content:space-between}
+footer ul{margin:0;padding:0;list-style:none;display:flex;gap:6px 18px;flex-wrap:wrap}
+footer li::before{content:"✓ ";color:var(--lime)}
+
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--lime);color:var(--lime-ink);font-weight:700;padding:12px 18px;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.4);z-index:50}
+[hidden]{display:none!important}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:20px;padding-top:36px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:1fr}
+  .steps div{border-right:0;border-bottom:1px solid var(--line)}
+  .steps div:last-child{border-bottom:0}
+}
+@media (max-width:420px){ .grid{grid-template-columns:1fr} .pill.when{display:none} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.cat{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="ribbon"><div class="wrap"><span>Radar de ofertas</span><span>/</span><span>Atualizado todo dia às 8h</span><span>/</span><span>Equipe EngEasier</span></div></div>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#" aria-label="EngEasier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+    EngEasier
+  </a>
+  <span class="pill when"><i></i><span id="updated">Carregando…</span></span>
+</div></header>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <div class="eyebrow">Ofertas tech para afiliados</div>
+      <h1>Ofertas do dia.<em>Prontas pra indicar.</em></h1>
+    </div>
+    <p>Os produtos de <b>tecnologia, automação e eletrônica</b> mais baratos do dia, todos com <b>boa avaliação</b> e <b>comissão de afiliado</b>. Escolha a categoria, copie o link e divulgue.</p>
+  </section>
+
+  <section class="wrap">
+    <div class="steps" aria-label="Como usar">
+      <div><b>01</b><p style="margin:0"><strong>Escolha o tipo de produto</strong><span>Use os botões de categoria logo abaixo.</span></p></div>
+      <div><b>02</b><p style="margin:0"><strong>Copie o link ou o post pronto</strong><span>O link já é o seu link de afiliado.</span></p></div>
+      <div><b>03</b><p style="margin:0"><strong>Divulgue</strong><span>Cole no WhatsApp, no Instagram ou no grupo.</span></p></div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <nav class="catbar" aria-label="Tipos de produto">
+    <div class="wrap">
+      <div class="label">Que tipo de produto você vai indicar?</div>
+      <div class="cats" id="cats"></div>
+    </div>
+  </nav>
+
+  <section class="wrap">
+    <div class="tools">
+      <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Buscar: ESP32, sensor, tomada inteligente…" autocomplete="off">
+      </label>
+      <select id="sort" aria-label="Ordenar">
+        <option value="preco">Menor preço</option>
+        <option value="ganho">Maior ganho por venda</option>
+        <option value="comissao">Maior % de comissão</option>
+        <option value="vendas">Mais vendidos</option>
+        <option value="nota">Melhor avaliação</option>
+      </select>
+      <div class="stores" id="stores"></div>
+    </div>
+    <div class="count" id="count"></div>
+    <div id="notice"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <ul id="rules"></ul>
+  <span>Preços e comissões podem mudar. Confira na loja antes de divulgar.</span>
+</div></footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+const LOJAS = {shopee:"Shopee", mercadolivre:"Mercado Livre", amazon:"Amazon", demo:"Exemplo"};
+const ESPECIAIS = [
+  {id:"todos", nome:"Todos"},
+  {id:"novos", nome:"🆕 Novidades", f:p=>p.novo},
+  {id:"baixou", nome:"📉 Baixou de preço", f:p=>p.preco_ontem && p.preco < p.preco_ontem},
+  {id:"comissao", nome:"💰 Maiores comissões", f:p=>true, sort:"ganho", top:40},
+];
+const $ = s => document.querySelector(s);
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const pct = v => (v*100).toLocaleString("pt-BR",{maximumFractionDigits:1})+"%";
+const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+
+let DATA = null, state = {cat:"todos", q:"", sort:"preco", loja:"todas"};
+
+fetch("ofertas.json?"+Date.now()).then(r=>r.json()).then(d=>{DATA=d; init();})
+  .catch(()=>{ $("#updated").textContent="Sem dados"; $("#notice").innerHTML=`<div class="notice"><strong>Não consegui carregar as ofertas</strong>Atualize a página em alguns minutos.</div>`; });
+
+function init(){
+  const d = DATA, ps = d.produtos;
+  const dt = new Date(d.atualizado);
+  $("#updated").textContent = "Atualizado " + dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}) + " · " + dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  const maxGain = ps.reduce((m,p)=>Math.max(m,p.ganho||0),0);
+  $("#stats").innerHTML = [
+    [ps.length.toLocaleString("pt-BR"), "produtos aprovados", true],
+    [ps.filter(p=>p.novo).length, "novidades hoje"],
+    [ps.filter(p=>p.preco_ontem && p.preco<p.preco_ontem).length, "baixaram de preço"],
+    [maxGain? brl(maxGain):"—", "maior ganho por venda", true],
+  ].map(([n,l,lime])=>`<div class="stat"><div class="n ${lime?"lime":""}">${n}</div><div class="l">${l}</div></div>`).join("");
+  $("#rules").innerHTML = [
+    `Nota ${String(d.regras.nota_minima).replace(".",",")} ou mais`,
+    `Comissão a partir de ${pct(d.regras.comissao_minima)}`,
+    "Vendedores do Brasil", "Só tecnologia",
+  ].map(t=>`<li>${t}</li>`).join("");
+
+  const lojas = [...new Set(ps.map(p=>p.loja))];
+  $("#stores").innerHTML = lojas.length>1 ? ["todas",...lojas].map(l=>`<button class="store-btn" data-loja="${l}" aria-pressed="${l==="todas"}">${l==="todas"?"Todas as lojas":LOJAS[l]||l}</button>`).join("") : "";
+
+  if (d.status === "aguardando") {
+    $("#notice").innerHTML = `<div class="notice"><strong>As ofertas chegam em breve</strong>Estamos aguardando a Shopee liberar o acesso. Assim que liberar, esta página se atualiza sozinha todo dia às 8h.</div>`;
+  } else if (lojas.includes("demo")) {
+    $("#notice").innerHTML = `<div class="demo-flag">Modo teste · produtos de exemplo, os links não funcionam</div>`;
+  }
+  renderCats(); render();
+}
+
+function catsList(){
+  const ps = DATA.produtos;
+  return [...ESPECIAIS.map(e=>({...e, n: e.id==="todos"? ps.length : e.top? Math.min(e.top, ps.length) : ps.filter(e.f).length, special:e.id!=="todos"})),
+          ...DATA.categorias.map(c=>({id:c.id, nome:c.nome, n:ps.filter(p=>p.categoria===c.id).length}))]
+    .filter(c=>c.id==="todos"||c.n>0);
+}
+function renderCats(){
+  $("#cats").innerHTML = catsList().map(c=>`<button class="cat ${c.special?"special":""}" data-cat="${c.id}" aria-pressed="${c.id===state.cat}">${esc(c.nome)} <small>${c.n}</small></button>`).join("");
+}
+
+function render(){
+  let ps = DATA.produtos.slice();
+  const esp = ESPECIAIS.find(e=>e.id===state.cat);
+  if (esp && esp.f) ps = ps.filter(esp.f);
+  if (!esp) ps = ps.filter(p=>p.categoria===state.cat);
+  if (state.loja!=="todas") ps = ps.filter(p=>p.loja===state.loja);
+  if (state.q) { const q = norm(state.q).split(/\s+/); ps = ps.filter(p=>q.every(w=>norm(p.titulo).includes(w))); }
+  const sort = (esp && esp.sort && state.sort==="preco") ? esp.sort : state.sort;
+  const by = {preco:(a,b)=>a.preco-b.preco, ganho:(a,b)=>b.ganho-a.ganho, comissao:(a,b)=>b.comissao-a.comissao,
+              vendas:(a,b)=>(b.vendas||0)-(a.vendas||0), nota:(a,b)=>(b.nota||0)-(a.nota||0)}[sort];
+  ps.sort(by);
+  if (esp && esp.top) ps = ps.slice(0, esp.top);
+
+  const nome = (catsList().find(c=>c.id===state.cat)||{}).nome || "";
+  $("#count").innerHTML = `<b>${ps.length}</b> ${ps.length===1?"produto":"produtos"} · ${esc(nome)}`;
+  if (!ps.length && DATA.status!=="aguardando") {
+    $("#grid").innerHTML = `<div class="notice" style="grid-column:1/-1"><strong>Nada encontrado</strong>Tente outra palavra ou outra categoria.</div>`;
+    return;
+  }
+  $("#grid").innerHTML = ps.map(card).join("");
+}
+
+function card(p){
+  const antes = p.preco_antes && p.preco_antes > p.preco ? p.preco_antes : null;
+  const off = antes ? Math.round((1-p.preco/antes)*100) : 0;
+  const baixou = p.preco_ontem && p.preco < p.preco_ontem;
+  const img = p.imagem ? `<img src="${esc(p.imagem)}" alt="" loading="lazy">`
+    : `<svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>`;
+  return `<article class="card">
+    <div class="thumb">${img}
+      <div class="badges">${p.novo?`<span class="badge b-new">Novo</span>`:""}${baixou?`<span class="badge b-drop">Baixou ${Math.round((1-p.preco/p.preco_ontem)*100)}%</span>`:""}</div>
+      <span class="badge b-store ${p.loja}">${LOJAS[p.loja]||p.loja}</span>
+    </div>
+    <div class="body">
+      <div class="title" title="${esc(p.titulo)}">${esc(p.titulo)}</div>
+      <div class="priceline"><span class="price">${brl(p.preco)}</span>${antes?`<span class="old">${brl(antes)}</span><span class="off">-${off}%</span>`:""}</div>
+      <div class="meta">${p.nota?`<span>⭐ ${p.nota.toFixed(1).replace(".",",")}</span>`:""}${p.vendas?`<span>${Number(p.vendas).toLocaleString("pt-BR")} vendidos</span>`:""}<span>${pct(p.comissao)}${p.comissao_estimada?" (estimada)":""}</span></div>
+      <div class="gain"><span>Você ganha por venda</span><b>${brl(p.ganho)}</b></div>
+      <div class="actions">
+        <button class="btn primary" data-copy="link" data-id="${esc(p.id)}">Copiar link</button>
+        <button class="btn" data-copy="post" data-id="${esc(p.id)}">Copiar post</button>
+        <a class="btn wide" href="${esc(p.link)}" target="_blank" rel="noopener">Ver na loja ↗</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function post(p){
+  const antes = p.preco_antes && p.preco_antes > p.preco ? p.preco_antes : null;
+  return [
+    `⚡ ${p.titulo}`,
+    antes ? `De ~${brl(antes)}~ por *${brl(p.preco)}*` : `Por apenas *${brl(p.preco)}*`,
+    p.nota ? `⭐ Nota ${p.nota.toFixed(1).replace(".",",")}${p.vendas?` · ${Number(p.vendas).toLocaleString("pt-BR")} vendidos`:""}` : "",
+    `🛒 ${LOJAS[p.loja]||p.loja}`,
+    `👉 ${p.link}`,
+    "", "Corre que o preço pode mudar!",
+  ].filter((l,i)=>l!==""||i===5).join("\n");
+}
+
+async function copy(text, msg){
+  try { await navigator.clipboard.writeText(text); toast(msg); }
+  catch { const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); toast(msg); }
+}
+let tt; function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2400); }
+
+document.addEventListener("click", e=>{
+  const c = e.target.closest(".cat");
+  if (c) { state.cat=c.dataset.cat; renderCats(); render(); document.querySelector(`.cat[data-cat="${state.cat}"]`)?.scrollIntoView({inline:"center",block:"nearest"}); return; }
+  const s = e.target.closest(".store-btn");
+  if (s) { state.loja=s.dataset.loja; document.querySelectorAll(".store-btn").forEach(b=>b.setAttribute("aria-pressed", b===s)); render(); return; }
+  const b = e.target.closest("[data-copy]");
+  if (b) { const p = DATA.produtos.find(x=>x.id===b.dataset.id); if (!p) return;
+    b.dataset.copy==="link" ? copy(p.link,"Link copiado ✓") : copy(post(p),"Post copiado ✓ É só colar no WhatsApp"); }
+});
+let qt; $("#q").addEventListener("input", e=>{ clearTimeout(qt); qt=setTimeout(()=>{state.q=e.target.value.trim(); render();},150); });
+$("#sort").addEventListener("change", e=>{ state.sort=e.target.value; render(); });
+</script>
+</body>
+</html>
