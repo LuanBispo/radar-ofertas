@@ -50,7 +50,17 @@ def _float(v):
 
 
 def search(query: str, limit: int, cfg: dict) -> list[Product]:
-    body = {"query": QUERY, "variables": {"keyword": query, "sortType": SORT_PRICE_ASC, "page": 1, "limit": limit}}
+    # Pesquisa o mesmo termo em várias ordenações (mais barato, mais vendido, maior comissão)
+    # para trazer o máximo de produtos diferentes. Repetidos são removidos depois.
+    out = []
+    for sort in cfg.get("shopee_ordenacoes") or [SORT_PRICE_ASC]:
+        out.extend(_search_sorted(query, limit, sort))
+        time.sleep(0.3)
+    return out
+
+
+def _search_sorted(query: str, limit: int, sort: int) -> list[Product]:
+    body = {"query": QUERY, "variables": {"keyword": query, "sortType": sort, "page": 1, "limit": limit}}
     payload = json.dumps(body, separators=(",", ":"))
     r = requests.post(ENDPOINT, data=payload, headers=_headers(payload), timeout=30)
     r.raise_for_status()
