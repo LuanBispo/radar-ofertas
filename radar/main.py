@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 
 from . import filters, report
 from .db import History
-from .sources import amazon, demo, mercadolivre, shopee
+from .sources import amazon, demo, mercadolivre, painel_shopee, shopee
 
-SOURCES = {"shopee": shopee, "mercadolivre": mercadolivre,
+SOURCES = {"shopee": shopee, "painel_shopee": painel_shopee, "mercadolivre": mercadolivre,
            "amazon": amazon, "demo": demo}
 
 
