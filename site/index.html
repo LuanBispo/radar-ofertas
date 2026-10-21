@@ -242,7 +242,7 @@ function init(){
   $("#rules").innerHTML = [
     `Nota ${String(d.regras.nota_minima).replace(".",",")} ou mais`,
     `Comissão a partir de ${pct(d.regras.comissao_minima)}`,
-    "Vendedores do Brasil", "Só tecnologia",
+    "Evita vendedores do exterior", "Só tecnologia",
   ].map(t=>`<li>${t}</li>`).join("");
 
   const lojas = [...new Set(ps.map(p=>p.loja))];
