@@ -4,7 +4,8 @@
 # ============================================================
 
 fontes:
-  shopee: true        # Shopee Affiliate Open API (retorna comissão real)
+  shopee: true        # Shopee Affiliate Open API (retorna comissão real) — liga sozinha quando houver chave
+  painel_shopee: true # ofertas reais coletadas no painel de afiliados (data/shopee_painel.json)
   mercadolivre: true  # API do ML (comissão estimada pela tabela abaixo)
   amazon: false       # Amazon (só libera após 3 vendas em 180 dias)
   demo: false         # dados fictícios só para testar o fluxo
