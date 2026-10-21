@@ -14,6 +14,9 @@ def _norm(s: str) -> str:
 def reason_to_reject(p: Product, f: dict) -> str | None:
     if not p.url:
         return "sem link"
+    # lojas internacionais da Shopee costumam ter o nome entre colchetes no início: "[loja] Produto..."
+    if p.title.lstrip().startswith("[") and "]" in p.title[:30]:
+        return "vendedor do exterior (provável)"
     title = _norm(p.title)
     # tecnologia = contém um termo da lista OU uma palavra significativa da própria busca
     query_words = [w for w in _norm(p.query).split() if len(w) >= 4 and w not in STOPWORDS]
